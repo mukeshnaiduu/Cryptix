@@ -47,7 +47,7 @@ def _register_extensions(app: Flask) -> None:
 
 def _register_routes(app: Flask) -> None:
     @app.route("/")
-    def dashboard():  # type: ignore[misc]
+    def dashboard():
         remaining_games = None
         recent_games = []
 
