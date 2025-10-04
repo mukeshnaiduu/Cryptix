@@ -20,7 +20,7 @@ def register():
 
         if not _is_valid_username(username):
             flash(
-                "Username must be at least 5 characters, start with a letter, include both upper and lower case, and only use letters or numbers.",
+                "Username must be at least 5 characters, start with a letter, contain only letters or numbers, include upper and lower case, and have at least 5 letters.",
                 "danger",
             )
         elif not _is_valid_password(password):
@@ -80,6 +80,8 @@ def _is_valid_username(username: str) -> bool:
     if not username[0].isalpha():
         return False
     if not username.isalnum():
+        return False
+    if sum(1 for ch in username if ch.isalpha()) < 5:
         return False
     has_upper = any(ch.isupper() for ch in username)
     has_lower = any(ch.islower() for ch in username)

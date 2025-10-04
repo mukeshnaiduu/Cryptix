@@ -51,7 +51,7 @@ def init_cli(app):
 
         if not _is_valid_username(username):
             raise click.ClickException(
-                "Username must be at least 5 characters, start with a letter, include upper and lower case, and contain only letters or numbers."
+                "Username must start with a letter, contain only letters or numbers, include upper and lower case, and have at least 5 letters."
             )
 
         if not _is_valid_password(password):
