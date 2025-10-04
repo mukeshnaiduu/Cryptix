@@ -59,7 +59,6 @@ cryptix/
 │    ├── css/main.css
 │    └── js/main.js
 │── requirements.txt
-│── PROJECT_CHECKLIST.md
 │── README.md
 
 ````
@@ -110,9 +109,6 @@ flask run
 
 The app will be available at 👉 `http://127.0.0.1:5000`
 
-### 6. (Optional) Load the app in admin mode
-- Visit `/auth/login`, log in with an admin user, and you’ll be redirected to the admin dashboard instead of the game flow.
-
 ---
 
 ## 🔧 CLI quick reference
@@ -124,19 +120,6 @@ flask --app app create-admin alice P@ss1 # Create an admin with username/passwor
 ```
 
 ---
-
-## 📦 Requirements
-
-Example `requirements.txt`:
-
-```
-Flask==2.3.3
-Flask-Login==0.6.3
-Flask-SQLAlchemy==3.1.1
-Flask-Bcrypt==1.0.1
-Flask-Migrate==4.0.7
-python-dotenv==1.0.1
-```
 
 
 ## 📜 License
