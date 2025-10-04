@@ -118,10 +118,3 @@ flask --app app init-db                 # Create tables and seed the default 20 
 flask --app app seed-words --force      # Reseed word list (clears and reloads defaults)
 flask --app app create-admin alice P@ss1 # Create an admin with username/password
 ```
-
----
-
-
-## 📜 License
-
-This project is licensed under the MIT License. Feel free to use and modify.
