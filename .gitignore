@@ -1,27 +1,8 @@
-# Python
 __pycache__/
 *.py[cod]
 *$py.class
-
-# Environments
 .env
 .venv/
 venv/
-ENV/
-env/
-
-# IDEs and tools
-.vscode/
-.idea/
-*.swp
-
-# Databases
 instance/
-*.sqlite3
 *.db
-
-# Byte-compiled / optimized / DLL files
-*.so
-
-# Logs
-*.log
