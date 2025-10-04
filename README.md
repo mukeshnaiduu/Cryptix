@@ -7,26 +7,26 @@ A Flask-based word-guessing game inspired by Wordle, with **player and admin rol
 
 ### 👤 Player  
 - Register and log in (secure authentication with validation).  
-- Play up to **3 games per day**.  
-- Each game allows **5 guesses** to crack a random 5-letter word.  
-- Interactive feedback for guesses:  
+- Play up to **3 games per day**; each game allows **5 guesses** of 5-letter uppercase words.  
+- Get interactive feedback on every guess:  
   - 🟩 **Green** – correct letter, correct position.  
   - 🟧 **Orange** – correct letter, wrong position.  
   - ⬛ **Grey** – letter not in the word.  
-- Win with a congratulatory message 🎉 or see a “Better luck next time” message.  
-- Past guesses shown in sequence.  
+- Win with a celebratory banner or see a “Better luck next time” message after 5 attempts.  
+- Review previous guesses in-order while playing.  
 
 ### 🛠️ Admin  
-- Manage the word bank (20+ 5-letter words stored in DB).  
-- View **daily reports**: number of users, number of correct guesses.  
-- View **user reports**: date, number of games played, number of correct guesses.  
+- Log in to access dashboards and reports (admin accounts don’t play the guessing game).  
+- View the **daily report** (players who played, wins) for any date.  
+- Inspect detailed **per-player reports** with win/loss counts, total guesses, averages, and full game history.  
+- Seed and manage the initial 20-word bank via CLI tools.  
 
 ---
 
 ## 🗄️ Tech Stack  
 - **Backend:** Flask (Python)  
-- **Frontend:** HTML, CSS (Bootstrap/Tailwind), JavaScript  
-- **Database:** SQLite (default) – can be swapped for PostgreSQL/MySQL  
+- **Frontend:** HTML, CSS (Bootstrap 5), JavaScript  
+- **Database:** SQLite (development default)  
 - **ORM:** SQLAlchemy  
 - **Auth:** Flask-Login, Bcrypt for password hashing  
 
@@ -42,24 +42,25 @@ cryptix/
 │    ├── cli.py         # Flask CLI commands (init-db, seed-words, create-admin)
 │    ├── extensions.py  # Flask extensions (db, login, migrate, bcrypt)
 │    ├── models.py      # Database models (Users, Words, Games, Guesses)
-│    ├── routes/        # Flask Blueprints
-│    │    ├── auth.py   # User authentication routes
-│    │    ├── game.py   # Game play logic
-│    │    └── admin.py  # Admin routes & reports
+│    ├── routes/        # Flask Blueprints (auth, game, admin)
 │    └── seeds.py       # Default word list for seeding
-│── templates/          # HTML templates (Jinja2)
+│── templates/
 │    ├── base.html
-│    ├── login.html
-│    ├── register.html
 │    ├── dashboard.html
 │    ├── game.html
-│    └── reports.html
-│── static/             # Static files
-│    ├── css/
-│    ├── js/
-│── static/             # CSS/JS assets
-│── requirements.txt    # Dependencies
-│── README.md           # Project description
+│    ├── login.html
+│    ├── register.html
+│    └── admin/
+│         ├── dashboard.html
+│         ├── daily_report.html
+│         ├── players.html
+│         └── user_report.html
+│── static/
+│    ├── css/main.css
+│    └── js/main.js
+│── requirements.txt
+│── PROJECT_CHECKLIST.md
+│── README.md
 
 ````
 
@@ -109,6 +110,19 @@ flask run
 
 The app will be available at 👉 `http://127.0.0.1:5000`
 
+### 6. (Optional) Load the app in admin mode
+- Visit `/auth/login`, log in with an admin user, and you’ll be redirected to the admin dashboard instead of the game flow.
+
+---
+
+## 🔧 CLI quick reference
+
+```bash
+flask --app app init-db                 # Create tables and seed the default 20 words
+flask --app app seed-words --force      # Reseed word list (clears and reloads defaults)
+flask --app app create-admin alice P@ss1 # Create an admin with username/password
+```
+
 ---
 
 ## 📦 Requirements
@@ -124,7 +138,6 @@ Flask-Migrate==4.0.7
 python-dotenv==1.0.1
 ```
 
----
 
 ## 📜 License
 
