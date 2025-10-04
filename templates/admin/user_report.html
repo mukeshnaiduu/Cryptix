@@ -2,26 +2,101 @@
 {% block title %}User Report · Cryptix{% endblock %}
 {% block content %}
   <h1 class="mb-4">{{ player.username }}'s Activity</h1>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th scope="col">Date</th>
-        <th scope="col">Games Played</th>
-        <th scope="col">Correct Guesses</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for row in stats %}
-        <tr>
-          <td>{{ row.played_on }}</td>
-          <td>{{ row.games_played }}</td>
-          <td>{{ row.wins }}</td>
-        </tr>
-      {% else %}
-        <tr>
-          <td colspan="3" class="text-center text-muted">No activity yet.</td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Daily breakdown</h5>
+      <div class="table-responsive">
+        <table class="table table-striped align-middle mb-0">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Games</th>
+              <th scope="col">Wins</th>
+              <th scope="col">Losses</th>
+              <th scope="col">In Progress</th>
+              <th scope="col">Total Guesses</th>
+              <th scope="col">Avg Attempts</th>
+              <th scope="col">Win Rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in stats %}
+              {% set games = row.games_played or 0 %}
+              {% set wins = row.wins or 0 %}
+              {% set losses = row.losses or 0 %}
+              {% set in_progress = row.in_progress or 0 %}
+              {% set total_guesses = row.total_guesses or 0 %}
+              {% set avg_attempts = (total_guesses / games) if games else 0 %}
+              {% set win_rate = (wins / games * 100) if games else 0 %}
+              <tr>
+                <td>{{ row.played_on }}</td>
+                <td>{{ games }}</td>
+                <td>{{ wins }}</td>
+                <td>{{ losses }}</td>
+                <td>{{ in_progress }}</td>
+                <td>{{ total_guesses }}</td>
+                <td>{{ avg_attempts|round(2) }}</td>
+                <td>{{ win_rate|round(1) }}%</td>
+              </tr>
+            {% else %}
+              <tr>
+                <td colspan="8" class="text-center text-muted">No activity yet.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title">Game history</h5>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead>
+            <tr>
+              <th scope="col">Started</th>
+              <th scope="col">Completed</th>
+              <th scope="col">Word</th>
+              <th scope="col">Result</th>
+              <th scope="col">Attempts</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for game in game_details %}
+              <tr>
+                <td>{{ game.started_at.strftime('%Y-%m-%d %H:%M') if game.started_at else '—' }}</td>
+                <td>{{ game.completed_at.strftime('%Y-%m-%d %H:%M') if game.completed_at else '—' }}</td>
+                <td>{{ game.word }}</td>
+                <td>
+                  {% if game.won is none %}
+                    <span class="badge bg-secondary">In progress</span>
+                  {% elif game.won %}
+                    <span class="badge bg-success">Win</span>
+                  {% else %}
+                    <span class="badge bg-danger">Loss</span>
+                  {% endif %}
+                </td>
+                <td>{{ game.guess_count }}</td>
+                <td>
+                  {% if game.completed_at %}
+                    Completed
+                  {% else %}
+                    Active
+                  {% endif %}
+                </td>
+              </tr>
+            {% else %}
+              <tr>
+                <td colspan="6" class="text-center text-muted">No games recorded yet.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 {% endblock %}

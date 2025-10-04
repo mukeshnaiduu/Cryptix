@@ -4,7 +4,7 @@ from flask import abort, render_template, request
 from flask_login import current_user
 
 from ..extensions import db
-from ..models import Game, Roles, User, Word
+from ..models import Game, Guess, Roles, User, Word
 from . import admin_bp
 
 
@@ -57,15 +57,44 @@ def user_report(user_id: int):
     if player.role != Roles.PLAYER:
         abort(404)
 
+    guess_counts = (
+        db.session.query(
+            Guess.game_id.label("game_id"),
+            db.func.count(Guess.id).label("guess_count"),
+        )
+        .group_by(Guess.game_id)
+        .subquery()
+    )
+
     stats = (
         db.session.query(
             db.func.date(Game.started_at).label("played_on"),
             db.func.count(Game.id).label("games_played"),
             db.func.sum(db.case((Game.won.is_(True), 1), else_=0)).label("wins"),
+            db.func.sum(db.case((Game.won.is_(False), 1), else_=0)).label("losses"),
+            db.func.sum(db.case((Game.completed_at.is_(None), 1), else_=0)).label("in_progress"),
+            db.func.coalesce(db.func.sum(guess_counts.c.guess_count), 0).label("total_guesses"),
         )
+        .outerjoin(guess_counts, Game.id == guess_counts.c.game_id)
         .filter(Game.player_id == player.id)
         .group_by(db.func.date(Game.started_at))
         .order_by(db.func.date(Game.started_at).desc())
+        .all()
+    )
+
+    game_details = (
+        db.session.query(
+            Game.id.label("id"),
+            Game.started_at.label("started_at"),
+            Game.completed_at.label("completed_at"),
+            Game.won.label("won"),
+            Word.value.label("word"),
+            db.func.coalesce(guess_counts.c.guess_count, 0).label("guess_count"),
+        )
+        .join(Word, Word.id == Game.word_id)
+        .outerjoin(guess_counts, Game.id == guess_counts.c.game_id)
+        .filter(Game.player_id == player.id)
+        .order_by(Game.started_at.desc())
         .all()
     )
 
@@ -73,6 +102,7 @@ def user_report(user_id: int):
         "admin/user_report.html",
         player=player,
         stats=stats,
+        game_details=game_details,
     )
 
 
