@@ -1,0 +1,31 @@
+.game-board .letter {
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    text-transform: uppercase;
+}
+
+.tile-correct {
+    background-color: #198754;
+    color: #fff;
+}
+
+.tile-present {
+    background-color: #fd7e14;
+    color: #fff;
+}
+
+.tile-absent {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+.tile-empty {
+    background-color: #ced4da;
+    color: #fff;
+    opacity: 0.5;
+}

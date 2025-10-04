@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Daily Report · Cryptix{% endblock %}
+{% block content %}
+  <h1 class="mb-4">Daily Report</h1>
+  <form class="row gy-2 gx-3 align-items-center mb-3" method="get">
+    <div class="col-auto">
+      <label class="visually-hidden" for="date">Date</label>
+      <input type="date" class="form-control" id="date" name="date" value="{{ report_date.isoformat() }}">
+    </div>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-primary">View</button>
+    </div>
+  </form>
+
+  <div class="row g-3">
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title">Players Played</h5>
+          <p class="display-6">{{ users_played }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title">Correct Guesses</h5>
+          <p class="display-6">{{ wins }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

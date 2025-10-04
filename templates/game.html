@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Game · Cryptix{% endblock %}
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <h2 class="mb-4 text-center">Guess the word</h2>
+      {% if not game_over %}
+        <div class="mb-4">
+          <form method="post" class="d-flex gap-2" autocomplete="off">
+            <input type="text" name="guess" maxlength="5" minlength="5" class="form-control text-uppercase" placeholder="ABCDE" required>
+            <button class="btn btn-success" type="submit">Submit</button>
+          </form>
+        </div>
+      {% else %}
+        <div class="alert alert-{{ 'success' if game.won else 'info' }} text-center" role="alert">
+          {% if game.won %}
+            🎉 Congratulations! You cracked the code.
+          {% else %}
+            Better luck next time! The word was <strong>{{ target_word }}</strong>.
+          {% endif %}
+        </div>
+        <form method="post" action="{{ url_for('game.finish') }}" class="text-center mb-4">
+          <button class="btn btn-primary" type="submit">OK</button>
+        </form>
+      {% endif %}
+      <div class="game-board">
+        {% for row in board %}
+          <div class="d-flex justify-content-center gap-2 mb-2">
+            {% for cell in row %}
+              <div class="letter tile-{{ cell.status }}">{{ cell.letter }}</div>
+            {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+      <p class="text-muted text-center">Attempts remaining: {{ (max_attempts - guesses|length) if (max_attempts - guesses|length) > 0 else 0 }}</p>
+      {% if game.completed_at %}
+        <div class="alert alert-secondary text-center">Game finished on {{ game.completed_at.strftime('%Y-%m-%d %H:%M') }}</div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

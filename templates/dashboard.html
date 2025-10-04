@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · Cryptix{% endblock %}
+{% block content %}
+  <div class="text-center mb-4">
+    <h1 class="display-5 mb-3">Welcome to Cryptix</h1>
+    {% if current_user.is_authenticated %}
+      {% if current_user.is_admin() %}
+        <p class="lead">Welcome back, admin. Jump into reporting and word management.</p>
+        <a class="btn btn-primary" href="{{ url_for('admin.dashboard') }}">Go to Admin Dashboard</a>
+      {% else %}
+        <p class="lead">Track your progress, challenge yourself daily, and keep honing your vocabulary.</p>
+        <a class="btn btn-primary" href="{{ url_for('game.start') }}">Start New Game</a>
+      {% endif %}
+    {% else %}
+      <p class="lead">Register or log in to start guessing words and track your progress.</p>
+      <a class="btn btn-outline-primary me-2" href="{{ url_for('auth.register') }}">Create Account</a>
+      <a class="btn btn-primary" href="{{ url_for('auth.login') }}">Log In</a>
+    {% endif %}
+  </div>
+
+  {% if current_user.is_authenticated and not current_user.is_admin() %}
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-6 col-lg-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center">
+            <h6 class="text-uppercase text-muted">Games remaining today</h6>
+            <p class="display-5 mb-0">{{ remaining_games if remaining_games is not none else 3 }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Recent games</h5>
+            {% if recent_games %}
+              <div class="table-responsive">
+                <table class="table table-striped align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th scope="col">Started</th>
+                      <th scope="col">Word</th>
+                      <th scope="col">Result</th>
+                      <th scope="col">Attempts</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for game in recent_games %}
+                      <tr>
+                        <td>{{ game.started_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td>{{ game.word.value if game.word else '—' }}</td>
+                        <td>
+                          {% if game.won is none %}
+                            <span class="badge bg-secondary">In progress</span>
+                          {% elif game.won %}
+                            <span class="badge bg-success">Win</span>
+                          {% else %}
+                            <span class="badge bg-danger">Loss</span>
+                          {% endif %}
+                        </td>
+                        <td>{{ game.guesses.count() }}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            {% else %}
+              <p class="text-muted mb-0">No games played yet. Start one to see your stats!</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

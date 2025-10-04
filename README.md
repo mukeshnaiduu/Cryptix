@@ -37,11 +37,16 @@ A Flask-based word-guessing game inspired by Wordle, with **player and admin rol
 
 cryptix/
 │── app.py              # Flask app entry point
-│── models.py           # Database models (Users, Words, Games, Guesses)
-│── routes/             # Flask Blueprints
-│    ├── auth.py        # User authentication routes
-│    ├── game.py        # Game play logic
-│    └── admin.py       # Admin routes & reports
+│── app/
+│    ├── __init__.py    # Application factory
+│    ├── cli.py         # Flask CLI commands (init-db, seed-words, create-admin)
+│    ├── extensions.py  # Flask extensions (db, login, migrate, bcrypt)
+│    ├── models.py      # Database models (Users, Words, Games, Guesses)
+│    ├── routes/        # Flask Blueprints
+│    │    ├── auth.py   # User authentication routes
+│    │    ├── game.py   # Game play logic
+│    │    └── admin.py  # Admin routes & reports
+│    └── seeds.py       # Default word list for seeding
 │── templates/          # HTML templates (Jinja2)
 │    ├── base.html
 │    ├── login.html
@@ -52,6 +57,7 @@ cryptix/
 │── static/             # Static files
 │    ├── css/
 │    ├── js/
+│── static/             # CSS/JS assets
 │── requirements.txt    # Dependencies
 │── README.md           # Project description
 
@@ -81,7 +87,21 @@ venv\Scripts\activate      # Windows
 pip install -r requirements.txt
 ```
 
-### 4. Run the app
+### 4. Initialize the database and seed words
+
+```bash
+flask --app app init-db
+```
+
+> Need to refresh the word list later? Run `flask --app app seed-words --force`.
+
+> Optional: create an admin user quickly
+
+```bash
+flask --app app create-admin <username> <password>
+```
+
+### 5. Run the app
 
 ```bash
 flask run
@@ -96,10 +116,12 @@ The app will be available at 👉 `http://127.0.0.1:5000`
 Example `requirements.txt`:
 
 ```
-Flask==2.3.2
-Flask-Login==0.6.2
-Flask-SQLAlchemy==3.0.5
+Flask==2.3.3
+Flask-Login==0.6.3
+Flask-SQLAlchemy==3.1.1
 Flask-Bcrypt==1.0.1
+Flask-Migrate==4.0.7
+python-dotenv==1.0.1
 ```
 
 ---

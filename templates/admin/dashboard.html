@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard · Cryptix{% endblock %}
+{% block content %}
+  <h1 class="mb-4">Admin Dashboard</h1>
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title">Active Words</h5>
+          <p class="display-6">{{ total_words }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title">Players</h5>
+          <p class="display-6">{{ total_players }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title">Admins</h5>
+          <p class="display-6">{{ total_admins }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mt-4 d-flex gap-3">
+    <a class="btn btn-primary" href="{{ url_for('admin.daily_report') }}">Daily Report</a>
+    <a class="btn btn-outline-primary" href="{{ url_for('admin.players') }}">Players</a>
+    <a class="btn btn-outline-secondary" href="#" disabled>Manage Words (coming soon)</a>
+  </div>
+{% endblock %}

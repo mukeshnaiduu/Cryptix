@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}User Report · Cryptix{% endblock %}
+{% block content %}
+  <h1 class="mb-4">{{ player.username }}'s Activity</h1>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Games Played</th>
+        <th scope="col">Correct Guesses</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in stats %}
+        <tr>
+          <td>{{ row.played_on }}</td>
+          <td>{{ row.games_played }}</td>
+          <td>{{ row.wins }}</td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="3" class="text-center text-muted">No activity yet.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

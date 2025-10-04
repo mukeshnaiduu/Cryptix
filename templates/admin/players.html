@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Players · Cryptix{% endblock %}
+{% block content %}
+  <h1 class="mb-4">Players</h1>
+  <div class="card border-0 shadow-sm">
+    <div class="card-body">
+      {% if players %}
+        <div class="table-responsive">
+          <table class="table table-striped align-middle">
+            <thead>
+              <tr>
+                <th scope="col">Username</th>
+                <th scope="col">Registered</th>
+                <th scope="col">Games Played</th>
+                <th scope="col">Correct Guesses</th>
+                <th scope="col">Report</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for player in players %}
+                <tr>
+                  <td>{{ player.username }}</td>
+                  <td>{{ player.created_at.strftime('%Y-%m-%d') }}</td>
+                  <td>{{ player.games.count() }}</td>
+                  <td>{{ player.games.filter_by(won=True).count() }}</td>
+                  <td>
+                    <a class="btn btn-sm btn-outline-primary" href="{{ url_for('admin.user_report', user_id=player.id) }}">View</a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="text-muted mb-0">No players registered yet.</p>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

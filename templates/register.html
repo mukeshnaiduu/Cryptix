@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Register · Cryptix{% endblock %}
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+      <h2 class="mb-4 text-center">Create an account</h2>
+      <form method="post">
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input type="text" class="form-control" id="username" name="username" required minlength="5">
+          <div class="form-text">At least 5 characters, start with a letter, may include numbers.</div>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" name="password" required minlength="5">
+          <div class="form-text">Include letters, numbers, and one of $ % * @.</div>
+        </div>
+        <div class="mb-3">
+          <label for="role" class="form-label">Role</label>
+          <select class="form-select" id="role" name="role">
+            <option value="player" selected>Player</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Register</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}
